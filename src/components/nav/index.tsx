@@ -1,24 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getCurrentUser } from "~/server/auth";
-import { Login, LogoutText } from "./auth";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-
-function getInitial(name: string) {
-  let rgx = new RegExp(/(\p{L}{1})\p{L}+/, "gu");
-
-  let initials = [...name.matchAll(rgx)] || [];
-
-  return (
-    (initials.shift()?.[1] || "") + (initials.pop()?.[1] || "")
-  ).toUpperCase();
-}
+} from "../ui/dropdown-menu";
+import { LogoutText } from "./logout";
 
 export default async function Navbar() {
   const user = await getCurrentUser();
@@ -53,7 +44,9 @@ export default async function Navbar() {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Login />
+          <Button asChild>
+            <Link href="/login">Login</Link>
+          </Button>
         )}
       </div>
     </nav>
