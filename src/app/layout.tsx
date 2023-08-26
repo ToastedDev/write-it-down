@@ -7,8 +7,20 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://write-it-down.vercel.app"),
   title: "Write It Down!",
   description: "A simple notetaking app for your simple needs.",
+  themeColor: "#ffffff",
+  twitter: {
+    card: "summary_large_image",
+    creator: "@ToastedDev",
+    creatorId: "1145171094556426240",
+  },
+  openGraph: {
+    type: "website",
+    url: "/",
+  },
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({
