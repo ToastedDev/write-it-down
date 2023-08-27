@@ -10,20 +10,28 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { LogoutText } from "./logout";
+import ThemeDropdown from "./themes";
 
 export default async function Navbar() {
   const user = await getCurrentUser();
 
   return (
-    <nav className="p-3 border-b flex justify-between">
+    <nav className="flex justify-between border-b px-4 py-3">
       <Link
         href="/"
-        className="font-semibold flex gap-2 text-lg items-center hover:opacity-80"
+        className="flex items-center gap-2 text-lg font-semibold hover:opacity-80"
       >
-        <Image src="/logo.png" alt="Logo" width={35} height={35} />
+        <Image
+          src="/logo.png"
+          alt="Logo"
+          width={35}
+          height={35}
+          className="dark:invert"
+        />
         Write It Down!
       </Link>
-      <div>
+      <div className="flex items-center gap-2">
+        <ThemeDropdown />
         {user ? (
           <DropdownMenu>
             <DropdownMenuTrigger>
@@ -37,6 +45,9 @@ export default async function Navbar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="mr-3">
               <DropdownMenuGroup>
+                <DropdownMenuItem className="hover:cursor-pointer">
+                  <Link href="/settings">Manage account</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem className="hover:cursor-pointer">
                   <LogoutText />
                 </DropdownMenuItem>

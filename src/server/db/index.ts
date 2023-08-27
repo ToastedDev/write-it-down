@@ -1,6 +1,4 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
-import { env } from "~/env.mjs";
+import { sql } from "@vercel/postgres";
+import { drizzle } from "drizzle-orm/vercel-postgres";
 
-const client = postgres(env.DATABASE_URL);
-export const db = drizzle(client);
+export const db = drizzle(sql);

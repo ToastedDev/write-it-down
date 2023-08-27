@@ -10,6 +10,9 @@ const config = {
   images: {
     domains: ["avatars.githubusercontent.com", "cdn.discordapp.com"],
   },
+  experimental: {
+    serverActions: true,
+  },
 };
 
 export default config;

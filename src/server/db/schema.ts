@@ -1,4 +1,5 @@
 import {
+  boolean,
   integer,
   pgTable,
   primaryKey,
@@ -9,10 +10,12 @@ import type { AdapterAccount } from "next-auth/adapters";
 
 export const users = pgTable("user", {
   id: text("id").notNull().primaryKey(),
+  username: text("username"),
   name: text("name"),
   email: text("email").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
+  onboarding: boolean("onboarding").default(true),
 });
 
 export const accounts = pgTable(
@@ -35,7 +38,7 @@ export const accounts = pgTable(
   },
   (account) => ({
     compoundKey: primaryKey(account.provider, account.providerAccountId),
-  })
+  }),
 );
 
 export const sessions = pgTable("session", {
@@ -55,5 +58,5 @@ export const verificationTokens = pgTable(
   },
   (vt) => ({
     compoundKey: primaryKey(vt.identifier, vt.token),
-  })
+  }),
 );

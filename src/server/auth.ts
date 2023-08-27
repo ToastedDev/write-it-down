@@ -1,11 +1,12 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import { GetServerSidePropsContext } from "next";
 import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
-import GithubProvider from "next-auth/providers/github";
+import GithubProvider, { GithubProfile } from "next-auth/providers/github";
 import { env } from "~/env.mjs";
 import { db } from "./db";
 
@@ -19,15 +20,17 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & {
       id: string;
+      username?: string;
       // ...other properties
       // role: UserRole;
     };
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    // ...other properties
+    // role: UserRole;
+    username?: string;
+  }
 }
 
 /**
@@ -37,15 +40,28 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
+    session: ({ session, token, user }) => ({
       ...session,
       user: {
         ...session.user,
-        id: user.id,
+        name: token.name,
+        id: token.sub,
+        username: token.username,
       },
     }),
+    async jwt({ token, account, profile }) {
+      // Persist the OAuth access_token and or the user id to the token right after signin
+      if (account) {
+        token.username = (profile as any).login || (profile as any).username;
+        token.name = (profile as any).name || (profile as any).global_name;
+      }
+      return token;
+    },
   },
   adapter: DrizzleAdapter(db),
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
@@ -56,6 +72,15 @@ export const authOptions: NextAuthOptions = {
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
       allowDangerousEmailAccountLinking: true,
+      profile(profile: GithubProfile) {
+        return {
+          id: profile.id.toString(),
+          name: profile.name,
+          username: profile.login,
+          email: profile.email,
+          image: profile.avatar_url,
+        };
+      },
     }),
     /**
      * ...add more providers here.
@@ -64,10 +89,9 @@ export const authOptions: NextAuthOptions = {
      * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
      * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
      *
-     * @see https://next-auth.js.org/prov iders/github
+     * @see https://next-auth.js.org/providers/github
      */
   ],
-
   pages: {
     signIn: "/login",
   },
