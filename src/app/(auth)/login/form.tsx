@@ -11,7 +11,7 @@ export default function LoginForm() {
   const [isDiscordLoading, setIsDiscordLoading] = useState<boolean>(false);
   const isLoading = useMemo(
     () => isGithubLoading || isDiscordLoading,
-    [isGithubLoading, isDiscordLoading]
+    [isGithubLoading, isDiscordLoading],
   );
 
   return (
@@ -32,7 +32,7 @@ export default function LoginForm() {
         Login with GitHub
       </Button>
       <Button
-        className="w-full bg-[#5865F2] hover:bg-[#5865F2]/90"
+        className="w-full bg-[#5865F2] text-white hover:bg-[#5865F2]/90"
         disabled={isLoading}
         onClick={() => {
           setIsDiscordLoading(true);
