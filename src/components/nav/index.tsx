@@ -45,7 +45,7 @@ export default async function Navbar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="mr-3">
               <DropdownMenuGroup>
-                <DropdownMenuItem className="hover:cursor-pointer">
+                <DropdownMenuItem className="hover:cursor-pointer" asChild>
                   <Link href="/settings">Manage account</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="hover:cursor-pointer">
