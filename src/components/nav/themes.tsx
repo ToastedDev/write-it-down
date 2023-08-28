@@ -23,14 +23,29 @@ export default function ThemeDropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
+        <DropdownMenuItem>
+          <button
+            className="h-full w-full text-left"
+            onClick={() => setTheme("light")}
+          >
+            Light
+          </button>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
+        <DropdownMenuItem>
+          <button
+            className="h-full w-full text-left"
+            onClick={() => setTheme("dark")}
+          >
+            Dark
+          </button>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
+        <DropdownMenuItem>
+          <button
+            className="h-full w-full text-left"
+            onClick={() => setTheme("system")}
+          >
+            System
+          </button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

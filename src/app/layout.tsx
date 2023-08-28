@@ -13,6 +13,7 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   metadataBase: new URL("https://write-it-down.vercel.app"),
   title: "Write It Down!",
@@ -44,7 +45,6 @@ export default async function RootLayout({
     const userFromDb = (
       await db.select().from(users).where(eq(users.id, user.id))
     )[0];
-    console.log(userFromDb);
     if (userFromDb) {
       if (userFromDb.onboarding && url.pathname !== "/onboarding")
         return redirect("/onboarding");

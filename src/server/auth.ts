@@ -1,4 +1,5 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import { eq } from "drizzle-orm";
 import { GetServerSidePropsContext } from "next";
 import {
   getServerSession,
@@ -9,6 +10,7 @@ import DiscordProvider from "next-auth/providers/discord";
 import GithubProvider, { GithubProfile } from "next-auth/providers/github";
 import { env } from "~/env.mjs";
 import { db } from "./db";
+import { users } from "./db/schema";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -40,15 +42,20 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, token, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        name: token.name,
-        id: token.sub,
-        username: token.username,
-      },
-    }),
+    session: async ({ session, token }) => {
+      const user = (
+        await db.select().from(users).where(eq(users.id, token.sub!))
+      )[0];
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.sub,
+          name: user.name || token.name,
+          username: user.username || token.username,
+        },
+      };
+    },
     async jwt({ token, account, profile }) {
       // Persist the OAuth access_token and or the user id to the token right after signin
       if (account) {
