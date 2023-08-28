@@ -6,7 +6,13 @@ import { BsDiscord, BsGithub } from "react-icons/bs";
 import { Icons } from "~/components/icons";
 import { Button } from "~/components/ui/button";
 
-export default function LoginForm() {
+export default function LoginForm({
+  redirectTo,
+}: {
+  redirectTo: string | undefined;
+}) {
+  redirectTo = redirectTo ? "/" + redirectTo.slice(1) : undefined;
+
   const [isGithubLoading, setIsGithubLoading] = useState<boolean>(false);
   const [isDiscordLoading, setIsDiscordLoading] = useState<boolean>(false);
   const isLoading = useMemo(
@@ -21,7 +27,9 @@ export default function LoginForm() {
         disabled={isLoading}
         onClick={() => {
           setIsGithubLoading(true);
-          signIn("github");
+          signIn("github", {
+            callbackUrl: redirectTo,
+          });
         }}
       >
         {isGithubLoading ? (
@@ -36,7 +44,9 @@ export default function LoginForm() {
         disabled={isLoading}
         onClick={() => {
           setIsDiscordLoading(true);
-          signIn("discord");
+          signIn("discord", {
+            callbackUrl: redirectTo,
+          });
         }}
       >
         {isDiscordLoading ? (

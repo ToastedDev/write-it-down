@@ -55,7 +55,7 @@ export default async function Navbar() {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Button asChild>
+          <Button asChild className="h-[35px]">
             <Link href="/login">Login</Link>
           </Button>
         )}

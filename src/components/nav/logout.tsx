@@ -4,7 +4,14 @@ import { signOut } from "next-auth/react";
 
 export function LogoutText() {
   return (
-    <button className="w-full h-full text-left" onClick={() => signOut()}>
+    <button
+      className="h-full w-full text-left"
+      onClick={() =>
+        signOut({
+          callbackUrl: "/",
+        })
+      }
+    >
       Log out
     </button>
   );

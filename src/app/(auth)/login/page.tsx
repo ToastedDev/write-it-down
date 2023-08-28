@@ -17,8 +17,15 @@ export default async function SignInPage({
   const user = await getCurrentUser();
   if (user) return redirect("/");
 
-  let message = searchParams.message;
-  if (typeof message === "object") message = message[0];
+  let message =
+    typeof searchParams.message === "object"
+      ? searchParams.message[0]
+      : searchParams.message;
+
+  let redirectTo =
+    typeof searchParams.redirectTo === "object"
+      ? searchParams.redirectTo[0]
+      : searchParams.redirectTo;
 
   return (
     <Card className="w-[350px]">
@@ -32,7 +39,7 @@ export default async function SignInPage({
         <CardDescription>Welcome back! We&apos;ve missed you.</CardDescription>
       </CardHeader>
       <CardContent>
-        <LoginForm />
+        <LoginForm redirectTo={redirectTo} />
       </CardContent>
     </Card>
   );
